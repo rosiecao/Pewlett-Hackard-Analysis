@@ -1,5 +1,3 @@
---schema.sql
--- Creating tables for PH-EmployeeDB
 CREATE TABLE departments (
      dept_no VARCHAR(4) NOT NULL,
      dept_name VARCHAR(40) NOT NULL,
@@ -67,3 +65,31 @@ LEFT JOIN titles
 ON employees.emp_no = titles.emp_no
 WHERE (birth_date BETWEEN '1952-01-01' AND '1955-12-31')
 ORDER BY titles.emp_no;
+
+--Export the retirement_title.csv
+--Deliver 2
+
+SELECT DISTINCT ON (emp_no)emp_no,
+first_name, 
+last_name, 
+title
+INTO unique_titles
+FROM retirement_titles
+ORDER BY emp_no ASC, title DESC;
+
+--export unique_titles.csv
+
+--Retrieve the number of titles from the Unique Titles table
+SELECT COUNT(unique_titles.title), unique_titles.title
+
+-- create a Retiring Titles table to hold total count and title
+-- Group the table by title, then sort the count column in descending order.
+
+SELECT COUNT (unique_titles.title), 
+           title
+INTO retiring_titles
+FROM unique_titles
+GROUP BY title
+ORDER BY count DESC;
+
+--Export retiring_titles.csv
