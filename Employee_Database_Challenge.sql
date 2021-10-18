@@ -67,7 +67,6 @@ WHERE (birth_date BETWEEN '1952-01-01' AND '1955-12-31')
 ORDER BY titles.emp_no;
 
 --Export the retirement_title.csv
---Deliver 2
 
 SELECT DISTINCT ON (emp_no)emp_no,
 first_name, 
@@ -78,9 +77,6 @@ FROM retirement_titles
 ORDER BY emp_no ASC, title DESC;
 
 --export unique_titles.csv
-
---Retrieve the number of titles from the Unique Titles table
-SELECT COUNT(unique_titles.title), unique_titles.title
 
 -- create a Retiring Titles table to hold total count and title
 -- Group the table by title, then sort the count column in descending order.
@@ -93,3 +89,43 @@ GROUP BY title
 ORDER BY count DESC;
 
 --Export retiring_titles.csv
+
+--Deliverable 2
+
+SELECT employees.emp_no,
+       employees.first_name,
+	   employees.last_name,
+	   employees.birth_date,
+	   dept_emp.from_date,
+	   dept_emp.to_date
+INTO mentorship
+FROM employees 
+LEFT JOIN dept_emp
+ON employees.emp_no = dept_emp.emp_no
+WHERE (birth_date BETWEEN '1965-01-01' AND '1965-12-31')
+AND (to_date = '9999-01-01')
+ORDER BY dept_emp.to_date;
+
+SELECT mentorship.emp_no,
+       mentorship.first_name,
+	   mentorship.last_name,
+	   mentorship.birth_date,
+	   mentorship.from_date,
+	   mentorship.to_date,
+       titles.title
+INTO mentorship_eligibility
+FROM mentorship 
+LEFT JOIN titles
+ON mentorship.emp_no = titles.emp_no;
+
+SELECT DISTINCT ON (emp_no)emp_no,
+first_name, 
+last_name,
+birth_date,
+from_date,
+to_date,
+title
+INTO unique_mentorship_eligibility
+FROM mentorship_eligibility
+ORDER BY emp_no;
+
